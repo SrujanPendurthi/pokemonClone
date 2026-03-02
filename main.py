@@ -1,27 +1,44 @@
 import pygame
+import random
 
 #battle classes
 class Battle:
     def __init__(self):
         self.battler1 = None
         self.battler2 = None
-    def checkSpeed(battler1.Avatar, battler2.Avatar):
-        if (battler1.Avatar.speed > battler2.Avatar.speed):
-            doMove(batter1.Avatar)
-            doMove(battler2.Avatar)
-        elif (battler1.Avatar.speed < battler2.Avatar.speed):
-            doMove(batter2.Avatar)
-            doMove(battler1.Avatar)
+    
+    def checkSpeed(Battle.battler1.Hero, Battle.battler2.Hero):
+        if (battler1.Hero.speed > battler2.Hero.speed):
+            doMove(batter1.Hero)
+            doMove(battler2.Hero)
+        elif (battler1.Hero.speed < battler2.Hero.speed):
+            doMove(batter2.Hero)
+            doMove(battler1.Hero)
         else:
+            if not random.randint(0,1):
+                doMove(battler1.Hero)
+                doMove(battler2.Hero)
+            else:
+                doMove(battler2.Hero)
+                doMove(battler1.Hero)
             
-            
-
+class Move:
+    def __init__(self):
+        self.moveType = None
+        self.moveName = None
+        self.moveDamage = None
+        self.isMoveSpecial = False
+        
 class Battler:
     def __init__(self):
         self.name = None
-        self.avatars = []
-
-class Avatar:
+        self.heroes = []
+    def doMove(self):
+        moveType = "Internal"
+        if moveType == damaging:
+            moveTarget = "External"
+        
+class Hero:
     def __init__(self):
         self.name = None
         self.type = None
@@ -31,12 +48,8 @@ class Avatar:
         self.defense = None
         self.specialDefense = None
         self.speed = None
-    def move(Avatar):
-        checkSpeed()
-        if moveType == self:
-            doMove()
-        elif moveType == damaging:
-            doMove()
+    def move(Hero):
+        doMove()
 
 
 #gameloop stuff
