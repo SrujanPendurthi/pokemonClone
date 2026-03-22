@@ -1,62 +1,77 @@
 import pygame
 import random
 
-#battle classes
+# button position variables for more readable code
+# battle logic
+
 class Battle:
-    def __init__(self):
-        self.battler1 = None
-        self.battler2 = None
-    
-    def checkSpeed(Battle.battler1.Hero, Battle.battler2.Hero):
-        if (battler1.Hero.speed > battler2.Hero.speed):
-            doMove(batter1.Hero)
-            doMove(battler2.Hero)
-        elif (battler1.Hero.speed < battler2.Hero.speed):
-            doMove(batter2.Hero)
-            doMove(battler1.Hero)
+    def __init__(self,battler1,battler2):
+        self.battler1 = battler1
+        self.battler2 = battler2
+        battlers = [self.battler1, self.battler2]
+    def course():
+        while not ((self.battler2.aliveHeroes) or (self.battler1.aliveHeroes)):
+            BattleTurn.checkSpeed((promptBattler()))
+
+        
+
+class BattleTurn:
+    def checkSpeed():
+        if (Battler1.currentHero.speed > Battler2.currentHero.speed):
+            Battler1.currentHero.action()
+            Battler2.currentHero.action()
+        elif (Battler1.currentHero.speed < Battler2.currentHero.speed):
+            Battler2.currentHero.action()
+            Battler1.currentHero.action()
         else:
-            if not random.randint(0,1):
-                doMove(battler1.Hero)
-                doMove(battler2.Hero)
-            else:
-                doMove(battler2.Hero)
-                doMove(battler1.Hero)
-            
+            random.choice(Battler1.currentHero.speed,Battler2.currentHero.speed)
+
+
+class Player:
+    def __init__(self, name, heroParty):
+        self.name = name
+        self.heroParty = []
+        self.currentHeroIndex = 0
+        self.aliveHeroes = 0
+
 class Move:
-    def __init__(self):
-        self.moveType = None
-        self.moveName = None
-        self.moveDamage = None
-        self.isMoveSpecial = False
-        
-class Battler:
-    def __init__(self):
-        self.name = None
-        self.heroes = []
-    def doMove(self):
-        moveType = "Internal"
-        if moveType == damaging:
-            moveTarget = "External"
-        
-class Hero:
-    def __init__(self):
-        self.name = None
-        self.type = None
-        self.health = None
-        self.attack = None
-        self.specialAttack = None
-        self.defense = None
-        self.specialDefense = None
-        self.speed = None
-    def move(Hero):
-        doMove()
+    def __init__(self, name, damage, target):
+        self.name = name
+        self.damage = damage
+        self.target = target
+    
+    def action():
+        return Player.currentHero.health - Move.damage
 
 
+def drawBattleUI():
+    pygame.draw.rect(screen, (128, 128, 128), (10, 2*height//3, width-20, height//3 - 10), border_radius=10)
+    drawSwitchButton()
+    drawMoveButton()
+    drawContractButton()
+    drawArtifactsButton()
+
+def drawSwitchButton():
+    pygame.draw.rect(screen, (0,0,0), ((width-20)//2, (2*height//3)+height//24, width//4, height//8))
+    if ((width-20)//2 <= pygame.mouse.get_pos()[0] <= (width-20)//2 + width//4 and
+        (2*height//3)+height//24 <= pygame.mouse.get_pos()[1] <= (2*height//3)+height//24+height//8):
+        print("inside")
+
+def drawMoveButton():
+    pygame.draw.rect(screen, (0,255,0), ((width-20)//2, (2*height//3)+(height//24*4), width//4, height//8))
+
+def drawContractButton():
+    pygame.draw.rect(screen, (0,0,255), (((width-20)//2)+width//4, (2*height//3)+(height//24), width//4, height//8))
+
+def drawArtifactsButton():
+    pygame.draw.rect(screen, (0,0,255), (((width-20)//2)+width//4, (2*height//3)+(height//24*4), width//4, height//8))
+
+width,height = 800,600
 #gameloop stuff
 pygame.init()
 
 gameClock = pygame.time.Clock()
-screen = pygame.display.set_mode((800,600))
+screen = pygame.display.set_mode((width,height))
 isRunning = True
 
 while isRunning:
@@ -64,7 +79,8 @@ while isRunning:
         if event.type == pygame.QUIT:
             isRunning = False
         
-    screen.fill((0,0,0))
+    screen.fill((255,255,255))
+    drawBattleUI()
     pygame.display.flip()
     gameClock.tick(60)
 
