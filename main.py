@@ -1,87 +1,63 @@
 import pygame
 import random
+from battle import *
 
-# button position variables for more readable code
-# battle logic
+def movement(player, game):
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_w]:
+        player.playerY -= 5
+    if keys[pygame.K_s]:
+        player.playerY += 5
+    if keys[pygame.K_a]:
+        player.playerX -= 5
+    if keys[pygame.K_d]:
+        player.playerX += 5
 
-class Battle:
-    def __init__(self,battler1,battler2):
-        self.battler1 = battler1
-        self.battler2 = battler2
-        battlers = [self.battler1, self.battler2]
-    def course():
-        while not ((self.battler2.aliveHeroes) or (self.battler1.aliveHeroes)):
-            BattleTurn.checkSpeed((promptBattler()))
+class Game:
+    def __init__(self):
+        self.width, self.height = 800, 600
+        pygame.init()
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.gameClock = pygame.time.Clock()
+        self.isRunning = True
+        self.isMouseClicked = False
+        self.isBattleMode = False
 
-        
+        fireblast = Move("Fire Blast", 50)
+        slash = Move("Slash", 30)
 
-class BattleTurn:
-    def checkSpeed():
-        if (Battler1.currentHero.speed > Battler2.currentHero.speed):
-            Battler1.currentHero.action()
-            Battler2.currentHero.action()
-        elif (Battler1.currentHero.speed < Battler2.currentHero.speed):
-            Battler2.currentHero.action()
-            Battler1.currentHero.action()
-        else:
-            random.choice(Battler1.currentHero.speed,Battler2.currentHero.speed)
+        hero1 = Hero("Pyro", 100, 40, 10, 8)
+        hero1.moves.append(fireblast)
 
+        hero2 = Hero("Knight", 120, 30, 20, 5)
+        hero2.moves.append(slash)
 
-class Player:
-    def __init__(self, name, heroParty):
-        self.name = name
-        self.heroParty = []
-        self.currentHeroIndex = 0
-        self.aliveHeroes = 0
+        self.player1 = Player("Ash", [hero1])
+        self.player2 = Player("Gary", [hero2])
 
-class Move:
-    def __init__(self, name, damage, target):
-        self.name = name
-        self.damage = damage
-        self.target = target
-    
-    def action():
-        return Player.currentHero.health - Move.damage
+        self.battle = Battle(self.player1, self.player2)
 
+    def run(self):
+        while self.isRunning:
+            self.isMouseClicked = False
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.isRunning = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.isMouseClicked = True
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_b:
+                    self.isBattleMode = not self.isBattleMode
 
-def drawBattleUI():
-    pygame.draw.rect(screen, (128, 128, 128), (10, 2*height//3, width-20, height//3 - 10), border_radius=10)
-    drawSwitchButton()
-    drawMoveButton()
-    drawContractButton()
-    drawArtifactsButton()
+            self.screen.fill((255, 255, 255))
+            if not self.isBattleMode:
+                movement(self.player1, self)
+                pygame.draw.rect(self.screen, (255, 0, 0), (self.player1.playerX, self.player1.playerY, 50, 50))
+            if self.isBattleMode:
+                drawBattleUI(self)
+            pygame.display.flip()
+            self.gameClock.tick(60)
 
-def drawSwitchButton():
-    pygame.draw.rect(screen, (0,0,0), ((width-20)//2, (2*height//3)+height//24, width//4, height//8))
-    if ((width-20)//2 <= pygame.mouse.get_pos()[0] <= (width-20)//2 + width//4 and
-        (2*height//3)+height//24 <= pygame.mouse.get_pos()[1] <= (2*height//3)+height//24+height//8):
-        print("inside")
+        pygame.quit()
 
-def drawMoveButton():
-    pygame.draw.rect(screen, (0,255,0), ((width-20)//2, (2*height//3)+(height//24*4), width//4, height//8))
-
-def drawContractButton():
-    pygame.draw.rect(screen, (0,0,255), (((width-20)//2)+width//4, (2*height//3)+(height//24), width//4, height//8))
-
-def drawArtifactsButton():
-    pygame.draw.rect(screen, (0,0,255), (((width-20)//2)+width//4, (2*height//3)+(height//24*4), width//4, height//8))
-
-width,height = 800,600
-#gameloop stuff
-pygame.init()
-
-gameClock = pygame.time.Clock()
-screen = pygame.display.set_mode((width,height))
-isRunning = True
-
-while isRunning:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            isRunning = False
-        
-    screen.fill((255,255,255))
-    drawBattleUI()
-    pygame.display.flip()
-    gameClock.tick(60)
-
-pygame.quit()
+game = Game()
+game.run()
